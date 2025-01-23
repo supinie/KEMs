@@ -58,8 +58,10 @@ fn verify_decap_group(tg: &acvp::DecapTestGroup) {
 }
 
 fn verify_decap<K: KemCore>(tc: &acvp::DecapTestCase, dk_slice: &[u8]) {
-    let dk_bytes = Encoded::<K::DecapsulationKey>::try_from(dk_slice).unwrap();
-    let dk = K::DecapsulationKey::from_bytes(&dk_bytes);
+    println!("{:?}", dk_slice);
+    println!("{:?}", dk_slice.len());
+    let dk_bytes = Encoded::<K::DecapsulationKeyInner>::try_from(dk_slice).unwrap();
+    let dk = K::DecapsulationKey::from_expanded_bytes(&dk_bytes);
 
     let c = Ciphertext::<K>::try_from(tc.c.as_slice()).unwrap();
     let k = dk.decapsulate(&c).unwrap();
